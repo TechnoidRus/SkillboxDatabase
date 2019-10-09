@@ -1,14 +1,22 @@
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Courses")
+@Table(name = "courses")
 public class Course {
 
   @Id
@@ -25,16 +33,26 @@ public class Course {
 
   private String description;
 
-  @Column(name = "teacher_id")
-  private int teacherId;
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "teacher_id")
+  private Teacher teacher;
 
   @Column(name = "students_count")
-  private int studentCount;
+  private Integer studentCount;
 
   private int price;
+  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinTable(name = "subscriptions",
+      joinColumns = {@JoinColumn(name = "course_id")},
+      inverseJoinColumns = {@JoinColumn(name = "student_id")}
+  )
+  private List<Student> students;
 
   @Column(name = "price_per_hour")
-  private float pricePerHour;
+  private Float pricePerHour;
+
+  @OneToMany(mappedBy = "course")
+  List<Subscription> subscriptions;
 
   public int getId() {
     return id;
@@ -76,15 +94,7 @@ public class Course {
     this.description = description;
   }
 
-  public int getTeacherId() {
-    return teacherId;
-  }
-
-  public void setTeacherId(int teacherId) {
-    this.teacherId = teacherId;
-  }
-
-  public int getStudentCount() {
+  public Integer getStudentCount() {
     return studentCount;
   }
 
@@ -92,7 +102,7 @@ public class Course {
     this.studentCount = studentCount;
   }
 
-  public int getPrice() {
+  public Integer getPrice() {
     return price;
   }
 
@@ -100,11 +110,44 @@ public class Course {
     this.price = price;
   }
 
-  public float getPricePerHour() {
+  public Float getPricePerHour() {
     return pricePerHour;
   }
 
   public void setPricePerHour(float pricePerHour) {
     this.pricePerHour = pricePerHour;
   }
+
+  public Teacher getTeacher() {
+    return teacher;
+  }
+
+  public void setTeacher(Teacher teacher) {
+    this.teacher = teacher;
+  }
+
+  public List<Student> getStudents() {
+    return students;
+  }
+
+  public void setStudents(List<Student> students) {
+    this.students = students;
+  }
+
+  public void setStudentCount(Integer studentCount) {
+    this.studentCount = studentCount;
+  }
+
+  public void setPricePerHour(Float pricePerHour) {
+    this.pricePerHour = pricePerHour;
+  }
+
+  public List<Subscription> getSubscriptions() {
+    return subscriptions;
+  }
+
+  public void setSubscriptions(List<Subscription> subscriptions) {
+    this.subscriptions = subscriptions;
+  }
+
 }
