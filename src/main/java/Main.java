@@ -1,4 +1,3 @@
-import java.util.Date;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,7 +12,6 @@ public class Main {
         Session session = factory.getCurrentSession()) {
 
       session.beginTransaction();
-
       Student student = session.get(Student.class, 12);
       List<Course> courses = student.getCourses();
       for (Course cours : courses) {
@@ -33,12 +31,20 @@ public class Main {
       System.out.println(teacher.getName());
       System.out.println("---------------------------------------------------");
 
-      Subscription subscription = new Subscription(
-          new Subscription.Id(student.getId(), course.getId()), student, course, new Date());
-      session.save(subscription);
+      fillTable(session);
 
       session.getTransaction().commit();
     }
+  }
+  //метод заполнения таблицы student_courses
+  private static void fillTable(Session session){ {
+    session.createSQLQuery("insert into student_courses\n"
+        + "select students.id as student_id, courses.id as course_id FROM purchaselist\n"
+        + "join students ON students.name = purchaselist.student_name\n"
+        + "join courses on courses.name = purchaselist.course_name").executeUpdate();
+  }
+
+
   }
 
 }
