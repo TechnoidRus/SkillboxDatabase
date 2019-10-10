@@ -12,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -51,8 +50,6 @@ public class Course {
   @Column(name = "price_per_hour")
   private Float pricePerHour;
 
-  @OneToMany(mappedBy = "course")
-  List<Subscription> subscriptions;
 
   public int getId() {
     return id;
@@ -140,14 +137,6 @@ public class Course {
 
   public void setPricePerHour(Float pricePerHour) {
     this.pricePerHour = pricePerHour;
-  }
-
-  public List<Subscription> getSubscriptions() {
-    return subscriptions;
-  }
-
-  public void setSubscriptions(List<Subscription> subscriptions) {
-    this.subscriptions = subscriptions;
   }
 
 }

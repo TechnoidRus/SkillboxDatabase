@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -34,9 +33,6 @@ public class Student {
       inverseJoinColumns = {@JoinColumn(name = "course_id")}
   )
   private List<Course> courses;
-
-  @OneToMany(mappedBy = "student")
-  private List<Subscription> subscriptions;
 
 
   public int getId() {
@@ -80,12 +76,5 @@ public class Student {
     this.courses = courses;
   }
 
-  public List<Subscription> getSubscriptions() {
-    return subscriptions;
-  }
-
-  public void setSubscriptions(List<Subscription> subscriptions) {
-    this.subscriptions = subscriptions;
-  }
 
 }

@@ -7,33 +7,37 @@ import org.hibernate.cfg.Configuration;
 public class Main {
 
   public static void main(String[] args) {
-    SessionFactory factory = new Configuration().
+    try (SessionFactory factory = new Configuration().
         configure("hibernate.cfg.xml")
         .buildSessionFactory();
+        Session session = factory.getCurrentSession()) {
 
-    Session session;
-
-    try {
-      session = factory.getCurrentSession();
       session.beginTransaction();
 
-      List<Purchaselist> resultList = session.createQuery("from Purchaselist").getResultList();
-      for (Purchaselist purchaselist : resultList) {
-        System.out.println(purchaselist.getCourseName());
-        System.out.println(purchaselist.getId());
-        System.out.println(purchaselist.getStudentName());
+      Student student = session.get(Student.class, 12);
+      List<Course> courses = student.getCourses();
+      for (Course cours : courses) {
+        System.out.println(cours.getName());
       }
 
-      Student student = session.get(Student.class, 1);
-      Course course = session.get(Course.class, 30);
+      System.out.println("---------------------------------------------------");
+
+      Course course = session.get(Course.class, 5);
+      List<Student> students = course.getStudents();
+      for (Student s : students) {
+        System.out.println(s.getName());
+      }
+      System.out.println("---------------------------------------------------");
+
+      Teacher teacher = course.getTeacher();
+      System.out.println(teacher.getName());
+      System.out.println("---------------------------------------------------");
+
       Subscription subscription = new Subscription(
-          new Subscription.Id(student.getId(), course.getId()),
-          student,
-          course,
-          new Date());
+          new Subscription.Id(student.getId(), course.getId()), student, course, new Date());
+      session.save(subscription);
+
       session.getTransaction().commit();
-    } catch (Exception e) {
-      e.printStackTrace();
     }
   }
 
