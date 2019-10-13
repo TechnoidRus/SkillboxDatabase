@@ -1,3 +1,5 @@
+package models;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -11,13 +13,16 @@ import javax.persistence.Table;
 @Table(name = "purchaselist")
 public class Purchaselist {
 
+
   @EmbeddedId
   Id id;
 
   @Column(name = "student_name", updatable = false, insertable = false)
   private String studentName;
+
   @Column(name = "course_name", updatable = false, insertable = false)
   private String courseName;
+
   @Column(name = "price")
   private int price;
 
@@ -27,14 +32,6 @@ public class Purchaselist {
   public Purchaselist() {
   }
 
-  public Purchaselist(Id id, String studentName, String courseName, int price,
-      Date subscriptionDate) {
-    this.id = id;
-    this.studentName = studentName;
-    this.courseName = courseName;
-    this.price = price;
-    this.subscriptionDate = subscriptionDate;
-  }
 
   public Id getId() {
     return id;
@@ -104,11 +101,6 @@ public class Purchaselist {
     public Id() {
     }
 
-    public Id(String studentName, String courseName) {
-      this.studentName = studentName;
-      this.courseName = courseName;
-    }
-
     @Override
     public boolean equals(Object o) {
       if (this == o) {
@@ -117,9 +109,9 @@ public class Purchaselist {
       if (o == null || getClass() != o.getClass()) {
         return false;
       }
-      Id that = (Id) o;
-      return Objects.equals(studentName, that.studentName) &&
-          Objects.equals(courseName, that.courseName);
+      Id id = (Id) o;
+      return Objects.equals(studentName, id.studentName) &&
+          Objects.equals(courseName, id.courseName);
     }
 
     @Override

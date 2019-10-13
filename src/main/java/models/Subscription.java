@@ -1,3 +1,5 @@
+package models;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -19,6 +21,7 @@ public class Subscription {
   @ManyToOne
   @JoinColumn(name = "student_id", updatable = false, insertable = false)
   private Student student;
+
   @ManyToOne
   @JoinColumn(name = "course_id", updatable = false, insertable = false)
   private Course course;
@@ -72,34 +75,34 @@ public class Subscription {
 
 
     @Column(name = "student_id")
-    private int studentid;
+    private int studentId;
 
 
     @Column(name = "course_id")
-    private int courseid;
+    private int courseId;
 
     public Id() {
     }
 
-    public Id(int studentid, int courseid) {
-      this.studentid = studentid;
-      this.courseid = courseid;
+    public Id(int studentId, int courseId) {
+      this.studentId = studentId;
+      this.courseId = courseId;
     }
 
-    public int getStudentid() {
-      return studentid;
+    public int getStudentId() {
+      return studentId;
     }
 
-    public void setStudentid(int studentid) {
-      this.studentid = studentid;
+    public void setStudentId(int studentId) {
+      this.studentId = studentId;
     }
 
-    public int getCourseid() {
-      return courseid;
+    public int getCourseId() {
+      return courseId;
     }
 
-    public void setCourseid(int courseid) {
-      this.courseid = courseid;
+    public void setCourseId(int courseId) {
+      this.courseId = courseId;
     }
 
     @Override
@@ -111,13 +114,13 @@ public class Subscription {
         return false;
       }
       Id that = (Id) o;
-      return studentid == that.studentid &&
-          courseid == that.courseid;
+      return studentId == that.studentId &&
+          courseId == that.courseId;
     }
 
     @Override
     public int hashCode() {
-      return Objects.hash(studentid, courseid);
+      return Objects.hash(studentId, courseId);
     }
   }
 }

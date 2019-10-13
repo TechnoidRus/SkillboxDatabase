@@ -1,15 +1,13 @@
+package models;
+
 import java.util.Date;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -18,7 +16,7 @@ public class Student {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
+  private Integer id;
 
   private String name;
 
@@ -27,12 +25,11 @@ public class Student {
   @Column(name = "registration_date")
   private Date registrationDate;
 
-  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @JoinTable(name = "subscriptions",
-      joinColumns = {@JoinColumn(name = "student_id")},
-      inverseJoinColumns = {@JoinColumn(name = "course_id")}
-  )
-  private List<Course> courses;
+  @OneToMany(mappedBy = "student")
+  private List<Subscription> subscriptions;
+
+  @OneToMany(mappedBy = "student")
+  private List<StudentsCourses> studentsCourses;
 
 
   public int getId() {
@@ -68,13 +65,19 @@ public class Student {
     this.registrationDate = registrationDate;
   }
 
-  public List<Course> getCourses() {
-    return courses;
+  public List<Subscription> getSubscriptions() {
+    return subscriptions;
   }
 
-  public void setCourses(List<Course> courses) {
-    this.courses = courses;
+  public void setSubscriptions(List<Subscription> subscriptions) {
+    this.subscriptions = subscriptions;
   }
 
+  public List<StudentsCourses> getStudentsCourses() {
+    return studentsCourses;
+  }
 
+  public void setStudentsCourses(List<StudentsCourses> studentsCourses) {
+    this.studentsCourses = studentsCourses;
+  }
 }

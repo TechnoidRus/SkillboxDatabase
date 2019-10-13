@@ -1,7 +1,14 @@
 import java.util.List;
+import models.Course;
+import models.Purchaselist;
+import models.Student;
+import models.StudentsCourses;
+import models.Subscription;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 
 public class Main {
 
@@ -12,37 +19,40 @@ public class Main {
         Session session = factory.getCurrentSession()) {
 
       session.beginTransaction();
-      Student student = session.get(Student.class, 12);
-      List<Course> courses = student.getCourses();
-      for (Course cours : courses) {
-        System.out.println(cours.getName());
+      Student student = session.get(Student.class, 33);
+      List<Subscription> subscriptions = student.getSubscriptions();
+      for (Subscription subscription : subscriptions) {
+        System.out.println(subscription.getStudent().getName());
+        System.out.println(subscription.getCourse().getName());
+        System.out.println(subscription.getSubscriptionDate());
       }
-
-      System.out.println("---------------------------------------------------");
-
-      Course course = session.get(Course.class, 5);
-      List<Student> students = course.getStudents();
-      for (Student s : students) {
-        System.out.println(s.getName());
-      }
-      System.out.println("---------------------------------------------------");
-
-      Teacher teacher = course.getTeacher();
-      System.out.println(teacher.getName());
-      System.out.println("---------------------------------------------------");
 
       fillTable(session);
 
       session.getTransaction().commit();
     }
   }
+
   //метод заполнения таблицы student_courses
-  private static void fillTable(Session session){ {
-    session.createSQLQuery("insert into student_courses\n"
-        + "select students.id as student_id, courses.id as course_id FROM purchaselist\n"
-        + "join students ON students.name = purchaselist.student_name\n"
-        + "join courses on courses.name = purchaselist.course_name").executeUpdate();
-  }
+  private static void fillTable(Session session) {
+    List<Purchaselist> purchaselist = session.createQuery("from models.Purchaselist").getResultList();
+    for (Purchaselist var : purchaselist) {
+
+      DetachedCriteria studentsCriteria = DetachedCriteria.forClass(Student.class)
+          .add(Restrictions.eq("name", var.getStudentName()));
+      Student student = (Student) studentsCriteria.getExecutableCriteria(session).list().stream()
+          .findFirst().get();
+
+      DetachedCriteria coursesCriteria = DetachedCriteria.forClass(Course.class)
+          .add(Restrictions.eq("name", var.getCourseName()));
+      Course course = (Course) coursesCriteria.getExecutableCriteria(session).list().stream()
+          .findFirst().get();
+      System.out.println(course.getName());
+
+      StudentsCourses sc = new StudentsCourses(
+          new StudentsCourses.Id(student.getId(), course.getId()), student, course);
+      session.save(sc);
+    }
 
 
   }

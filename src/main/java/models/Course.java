@@ -1,17 +1,17 @@
+package models;
+
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -20,7 +20,7 @@ public class Course {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
+  private Integer id;
 
   private String name;
 
@@ -40,15 +40,15 @@ public class Course {
   private Integer studentCount;
 
   private int price;
-  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @JoinTable(name = "subscriptions",
-      joinColumns = {@JoinColumn(name = "course_id")},
-      inverseJoinColumns = {@JoinColumn(name = "student_id")}
-  )
-  private List<Student> students;
 
   @Column(name = "price_per_hour")
   private Float pricePerHour;
+
+  @OneToMany(mappedBy = "course")
+  private List<Subscription> subscriptions;
+
+  @OneToMany(mappedBy = "course")
+  private List<StudentsCourses> studentsCourses;
 
 
   public int getId() {
@@ -123,14 +123,6 @@ public class Course {
     this.teacher = teacher;
   }
 
-  public List<Student> getStudents() {
-    return students;
-  }
-
-  public void setStudents(List<Student> students) {
-    this.students = students;
-  }
-
   public void setStudentCount(Integer studentCount) {
     this.studentCount = studentCount;
   }
@@ -139,4 +131,19 @@ public class Course {
     this.pricePerHour = pricePerHour;
   }
 
+  public List<Subscription> getSubscriptions() {
+    return subscriptions;
+  }
+
+  public void setSubscriptions(List<Subscription> subscriptions) {
+    this.subscriptions = subscriptions;
+  }
+
+  public List<StudentsCourses> getStudentsCourses() {
+    return studentsCourses;
+  }
+
+  public void setStudentsCourses(List<StudentsCourses> studentsCourses) {
+    this.studentsCourses = studentsCourses;
+  }
 }

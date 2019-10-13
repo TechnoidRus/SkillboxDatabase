@@ -1,6 +1,7 @@
+package models;
+
 import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,7 +22,7 @@ public class Teacher {
   private int salary;
 
   private int age;
-  @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "teacher")
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private List<Course> courses;
 
