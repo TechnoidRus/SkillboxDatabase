@@ -35,7 +35,8 @@ public class Main {
 
   //метод заполнения таблицы student_courses
   private static void fillTable(Session session) {
-    List<Purchaselist> purchaselist = session.createQuery("from models.Purchaselist").getResultList();
+    List<Purchaselist> purchaselist = session.createQuery("from models.Purchaselist")
+        .getResultList();
     for (Purchaselist var : purchaselist) {
 
       DetachedCriteria studentsCriteria = DetachedCriteria.forClass(Student.class)
@@ -50,7 +51,8 @@ public class Main {
       System.out.println(course.getName());
 
       StudentsCourses sc = new StudentsCourses(
-          new StudentsCourses.Id(student.getId(), course.getId()), student, course);
+          new StudentsCourses.Id(student.getId(), course.getId()), student, course,
+          course.getPrice(), var.getSubscriptionDate());
       session.save(sc);
     }
 

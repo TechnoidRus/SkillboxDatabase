@@ -25,6 +25,7 @@ public class Subscription {
   @ManyToOne
   @JoinColumn(name = "course_id", updatable = false, insertable = false)
   private Course course;
+
   @Column(name = "subscription_date")
   private Date subscriptionDate;
 
